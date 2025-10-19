@@ -7,8 +7,8 @@
   "types": "dist/types/index.d.ts",
   "scripts": {
     "clean": "rimraf dist",
-    "build": "npm run clean && cross-env COLLECTION_ENDPOINT=https://your-analytics-server.com/collectlikith webpack --config webpack.config.js --mode production",
-    "dev": "cross-env COLLECTION_ENDPOINT=https://your-analytics-server.com/collect webpack --config webpack.config.js --mode development --watch",
+    "build": "npm run clean && webpack --config webpack.config.js --mode production",
+    "dev": "webpack --config webpack.config.js --mode development --watch",
     "type-check": "tsc --noEmit"
   },
   "keywords": [
@@ -23,7 +23,6 @@
     "@babel/core": "^7.26.0",
     "@babel/preset-env": "^7.26.0",
     "babel-loader": "^9.2.1",
-    "cross-env": "^10.1.0",
     "rimraf": "^6.0.1",
     "ts-loader": "^9.5.1",
     "typescript": "^5.6.3",

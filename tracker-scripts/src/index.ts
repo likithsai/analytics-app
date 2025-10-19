@@ -36,7 +36,6 @@ interface TrackerConfig {
   debug?: boolean;
   trackOutlinks?: boolean;
   trackDownloads?: boolean;
-  scrollDepthPercentages?: number[];
   maxHeatmapPoints?: number;
   retryBackoffBaseMs?: number;
   retryMaxAttempts?: number;
@@ -61,13 +60,12 @@ type TrackerEvent = BaseEvent;
 
 const DEFAULTS: Required<TrackerConfig> = {
   siteId: "",
-  collectionEndpoint: process.env.COLLECTION_ENDPOINT || "",
+  collectionEndpoint: `${window.location.origin}/api/analytics`,
   batchSize: 15,
   flushInterval: 5000,
   debug: false,
   trackOutlinks: true,
   trackDownloads: true,
-  scrollDepthPercentages: [25, 50, 75, 100],
   maxHeatmapPoints: 500,
   retryBackoffBaseMs: 500,
   retryMaxAttempts: 4,
@@ -413,27 +411,6 @@ export class AnalyticsTracker {
       },
       { capture: true, passive: true }
     );
-
-    // scroll depth (throttled)
-    const scrollHandler = throttle(() => {
-      const docHeight = Math.max(
-        document.documentElement.scrollHeight,
-        document.body.scrollHeight
-      );
-      const viewport =
-        window.innerHeight || document.documentElement.clientHeight;
-      const maxScroll = Math.max(0, docHeight - viewport);
-      if (maxScroll <= 0) return;
-      const current = window.scrollY || window.pageYOffset || 0;
-      const pct = Math.floor((current / maxScroll) * 100);
-      for (const p of this.config.scrollDepthPercentages) {
-        if (pct >= p && !this.scrollDepthReached.has(p)) {
-          this.scrollDepthReached.add(p);
-          this.trackEvent("Scroll", "DepthReached", `${p}%`, p);
-        }
-      }
-    }, 200);
-    window.addEventListener("scroll", scrollHandler, { passive: true });
 
     // keyboard (consent required? we record key names only sparingly)
     document.addEventListener("keydown", (e) => {
