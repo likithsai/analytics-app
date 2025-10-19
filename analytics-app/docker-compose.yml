@@ -1,0 +1,10 @@
+services:
+  app:
+    container_name: analytics-app
+    build: .
+    ports:
+      - "1543:3000"
+    environment:
+      NODE_ENV: production
+      # Add other env variables here if needed
+    restart: unless-stopped
