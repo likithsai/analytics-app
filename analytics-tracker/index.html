@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>AnalyticsTracker Demo</title>
+  </head>
+  <body>
+    <h1>AnalyticsTracker Demo</h1>
+
+    <!-- Include your compiled JS bundle -->
+    <script src="./dist/tracker.min.js"></script>
+
+    <script>
+      const tracker = new window.analytics({
+        siteId: "MY_SITE_ID",
+        debug: true,
+      });
+
+      tracker.grantConsent();
+      tracker.trackPage();
+      tracker.trackEvent("Button", "Click", "Demo Button");
+    </script>
+  </body>
+</html>
